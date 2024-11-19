@@ -36,10 +36,10 @@ app.use(express.json());
 
 // MySQL connection setup
 const connection = mysql.createConnection({
-  host: 'bsgxrsoukltvfmeg59l6-mysql.services.clever-cloud.com',
-  user: 'u1doi420s6fy7fox',
-  password: 'jkgK1zGbAdozK3ZGQjlw',
-  database: 'bsgxrsoukltvfmeg59l6'
+  host: 'localhost',
+  user: 'Taki', 
+  password: 'SqlServer/20', 
+  database: 'library_system' 
 });
 
 connection.connect(err => {
