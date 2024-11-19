@@ -36,7 +36,7 @@ export default {
   created() {
     const bookId = this.$route.params.id;
     axios
-      .get(`http://localhost:3000/books/${bookId}`)
+      .get(`https://final-librarybackend.onrender.com/books/${bookId}`)
       .then((response) => {
         this.book = response.data;
       })
