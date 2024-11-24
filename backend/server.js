@@ -72,14 +72,14 @@ app.get('/books/:id', (req, res) => {
 
     // Check if a book with the given ID was found
     if (results.length > 0) {
-      res.json(results[0]); // Send back the first (and only) result as a JSON object
+      res.json(results[0]);
     } else {
       res.status(404).send('Book not found');
     }
   });
 });
 
-// Signup route
+
 // Signup route
 app.post('/signup', (req, res) => {
   const { memberName, email, password, contactInfo, membershipType } = req.body;
@@ -301,9 +301,7 @@ WHERE
 
 
 
-// Example in Node.js (Express)
-// POST route to create a new notification for a member
-// GET route to fetch notifications for a specific member
+//notification
 app.get('/notifications', (req, res) => {
   const memberID = req.query.memberID;
   if (!memberID) {
@@ -321,7 +319,7 @@ app.get('/notifications', (req, res) => {
 
 
 
-// delet book 
+
 // Delete book by ID
 app.delete('/books/:id', (req, res) => {
   const bookId = req.params.id;
@@ -380,7 +378,7 @@ app.post('/events', (req, res) => {
   // Corrected SQL query
   connection.query(
     'INSERT INTO event (eventName, eventDate, location, description, staffID) VALUES (?, ?, ?, ?, ?)',
-    [name, date, location, description, 1], // Assuming staffID is 1 for simplicity
+    [name, date, location, description, 1], 
     (err, result) => {
       if (err) {
         console.error('Error creating event:', err); // More detailed error logging
@@ -392,18 +390,6 @@ app.post('/events', (req, res) => {
 });
 
 
-// Update event
-app.put('/events/:id', (req, res) => {
-  const { id } = req.params;
-  const { name, date, location, description } = req.body;
-  const updatedEvent = { name, date, location, description };
-  connection.query('UPDATE events SET ? WHERE id = ?', [updatedEvent, id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error updating event' });
-    }
-    res.json({ message: 'Event updated successfully' });
-  });
-});
 
 // Delete event
 app.delete('/events/:id', (req, res) => {
