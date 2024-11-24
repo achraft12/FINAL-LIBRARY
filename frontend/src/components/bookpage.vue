@@ -36,7 +36,7 @@ export default {
     },
   },
   created() {
-    axios.get('https://final-librarybackend.onrender.com/books')
+    axios.get('http://localhost:3000/books')
       .then(response => {
         this.books = response.data;
         this.filteredBooks = [...this.books]; // Initialize filteredBooks
