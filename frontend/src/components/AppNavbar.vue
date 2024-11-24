@@ -14,6 +14,7 @@
           <li><router-link to="/profile">{{ userUsername }}</router-link></li>
           <li><router-link to="/borrowedbooks">Borrowed Books</router-link></li>
           <li><router-link to="/EventManagement">events</router-link></li>
+          <li><router-link to="/admin/add-book" v-if="isFaculty()">add books</router-link></li>
           <li><button @click="signOut">Sign Out</button></li>
 
           <!-- Notifications -->
@@ -61,6 +62,7 @@ export default {
     };
   },
   computed: {
+   
     userUsername() {
       return localStorage.getItem('email'); // Get username from localStorage
     },
@@ -69,6 +71,10 @@ export default {
     }
   },
   methods: {
+    isFaculty() {
+  return this.userinfo?.membershipType === "Faculty";
+},
+
     isLoggedIn() {
       return !!localStorage.getItem('token'); // Check if token exists
     },
@@ -76,6 +82,7 @@ export default {
       localStorage.removeItem('token');
       localStorage.removeItem('username');
       localStorage.removeItem('userinfo');
+      localStorage.removeItem('usertype');
       alert('Logged out successfully');
       this.$router.push("/login").then(() => {
         window.location.reload(); // This will reload the page after the router push

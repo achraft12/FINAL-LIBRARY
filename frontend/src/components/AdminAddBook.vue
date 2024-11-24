@@ -79,15 +79,13 @@ export default {
         });
     },
     submitBook() {
-      const token = localStorage.getItem('token');
+      
       axios.post('http://localhost:3000/admin/add-book', this.book, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+       
       })
       .then(() => {
         alert('Book added successfully!');
-        this.$router.push('/admin');
+        this.$router.push('/admin/add-book');
       })
       .catch(error => {
         console.error('Error adding book:', error);

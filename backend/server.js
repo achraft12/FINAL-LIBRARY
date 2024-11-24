@@ -36,10 +36,10 @@ app.use(express.json());
 
 // MySQL connection setup
 const connection = mysql.createConnection({
-  host: 'bsgxrsoukltvfmeg59l6-mysql.services.clever-cloud.com',
-  user: 'u1doi420s6fy7fox',
-  password: 'jkgK1zGbAdozK3ZGQjlw',
-  database: 'bsgxrsoukltvfmeg59l6'
+  host: 'localhost',
+  user: 'Taki', 
+  password: 'SqlServer/20', 
+  database: 'library_system' 
 });
 
 connection.connect(err => {
@@ -125,64 +125,60 @@ app.post('/signup', (req, res) => {
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
 
-  // Check for empty fields
   if (!email || !password) {
     return res.status(400).json({ message: 'Email and password are required' });
   }
 
-  // Query the database
-  const query = 'SELECT * FROM Member WHERE email = ?';
-  connection.query(
-    "SELECT * FROM Member WHERE email = ?",
-    [email],
-    (err, results) => {
+  connection.query('SELECT * FROM Member WHERE email = ?', [email], (err, results) => {
+    if (err) {
+      console.error("Database query error:", err);
+      res.status(500).json({ message: "Database query failed" });
+      return;
+    }
+
+    if (results.length === 0) {
+      console.log("No user found with the email:", email);
+      res.status(401).json({ message: "Invalid email or password" });
+      return;
+    }
+
+    const user = results[0];
+    const storedPassword = user.password;
+
+    if (!storedPassword) {
+      console.error("Password not found in database for email:", email);
+      res.status(500).json({ message: "Password not found for the user" });
+      return;
+    }
+
+    bcrypt.compare(password, storedPassword, (err, isMatch) => {
       if (err) {
-        console.error("Database query error:", err);
-        res.status(500).json({ message: "Database query failed" });
+        console.error("Error comparing passwords:", err);
+        res.status(500).json({ message: "Error verifying password" });
         return;
       }
-  
-      console.log("Query results:", results); // Debug the results
-  
-      if (results.length === 0) {
+
+      if (!isMatch) {
+        console.log("Password mismatch for email:", email);
         res.status(401).json({ message: "Invalid email or password" });
         return;
       }
-  
-      const user = results[0];
-      console.log("User from DB:", user); // Check the user object
-      const storedPassword = user.PASSWORD;
-  
-      if (!storedPassword) {
-        console.error("Password field is empty in the database for this user");
-        res.status(500).json({ message: "Password not found for the user" });
-        return;
-      }
-  
-      // Proceed with bcrypt.compare
-      bcrypt.compare(password, storedPassword, (err, isMatch) => {
-        if (err) {
-          console.error("Error comparing passwords:", err);
-          res.status(500).json({ message: "Error verifying password" });
-          return;
-        }
-  
-        if (!isMatch) {
-          res.status(401).json({ message: "Invalid email or password" });
-          return;
-        }
-  
-        // Password matches, proceed with the response
-        res.status(200).json({
-          message: "Login successful",
-          token: "example_token",
-          user: { memberID: user.memberID, email: user.email, membershipType: user.membershipType },
-        });
+
+      const token = jwt.sign(
+        { userId: user.memberID, role: user.membershipType },
+        'your_secret_key',
+        { expiresIn: '1h' }
+      );
+
+      res.status(200).json({
+        message: "Login successful",
+        token,
+        user: { memberID: user.memberID, email: user.email, membershipType: user.membershipType, memberName:user.memberName, contactInfo:user.contactInfo },
       });
-    }
-  );
-  
+    });
+  });
 });
+
 
 
 app.get('/categories', (req, res) => {

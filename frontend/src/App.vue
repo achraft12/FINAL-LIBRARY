@@ -234,9 +234,11 @@ body {
   padding: 40px 20px;
   text-align: center;
   font-family: 'Roboto', sans-serif;
+
 }
 
 .footer-content {
+  
   display: flex;
   justify-content: space-around;
   align-items: flex-start;

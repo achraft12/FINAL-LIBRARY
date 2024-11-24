@@ -65,7 +65,9 @@ export default {
 
       // Alert and redirect
       alert('Login successful');
-      this.$router.push("/BookPage");
+      this.$router.push("/BookPage").then(() => {
+        window.location.reload(); // This will reload the page after the router push
+      });
     } else {
       alert(`Login failed: ${data.message}`);
     }

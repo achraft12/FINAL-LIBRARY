@@ -1,6 +1,6 @@
 <template>
   <div class="event-management-container">
-    <h1 class="title">Event Management</h1>
+    <h1 class="title">Events</h1>
 
     <!-- List of Events -->
     <div class="events-list">
@@ -12,7 +12,10 @@
           <p class="event-description">{{ event.description }}</p>
           <div v-if="isFaculty() === 'Faculty'" class="event-actions">
             <button class="edit-btn" @click="editEvent(event.eventID)">Edit</button>
+            <button class="edit-btn" @click="attend(event.eventID, event.eventDate)">attend</button>
             <button class="delete-btn" @click="deleteEvent(event.eventID)">Delete</button>
+          </div>
+          <div v-else>  <button class="edit-btn" @click="attend(event.eventID, event.eventDate)">attend</button>
           </div>
         </div>
       </div>
